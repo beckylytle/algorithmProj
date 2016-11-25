@@ -12,15 +12,15 @@ def ShortestPathMain(request):
     #this page will be static
     return render(request, 'alg/ShortestPathMain.html')
 
-def ShortestPathGame(request,id):
-    amtNodes = id
-    testvar = 'hello'
+def ShortestPathGame(request):
+    #amtNodes = id
+    shortestpath = [5]
     #this will generate a random graph with amtNodes & random edges/weights
     # THEN i'll run dijkstra's on it & save the shortest path value
     #it will then give the page an adjacency list of the graph & the shortest path value
     #probably should just generate a json file & put in static every time
     return render(request, 'alg/ShortestPathGame.html',{
-    'testvar':testvar
+    'shortestpath':shortestpath
     })
 
 def ShortestPathResult(request):

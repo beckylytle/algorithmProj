@@ -17,13 +17,18 @@
   font: 10px sans-serif;
 }
 
-
 </style>
 
+<div class=container>
+
+<button>Click</button> when you think you've found the shortest path!
+
+</div>
+
 <svg width="1000" height="600"></svg>
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-
 
 // Help from http://bl.ocks.org/mbostock/4062045
 
@@ -160,6 +165,22 @@ var path = [];
       .style("stroke", "#000000")
       .style("opacity", "0.5");
 
+$("button").click(function(){
+  if (path.length == 0) {
+        alert('You have not selected a path!'); }
+
+else if (path.length > 0) {
+        alert('This path is incorrect.');
+}
+
+else {
+        alert('Hooray! That is correct.');
+// if it is right
+}
+
+      }
+
+    );
 
 });
 
@@ -181,7 +202,6 @@ function dragended(d) {
 }
 
 </script>
-
 
 
 {% endblock %}

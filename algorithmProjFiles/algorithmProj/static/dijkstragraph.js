@@ -1,36 +1,3 @@
-{% extends "alg/base.html" %}
-
-{% block content %}
-
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-
-.links line {
-  stroke: #000000;
-  stroke-opacity: 0.25;
-  cursor: default;
-}
-
-.node text {
-  pointer-events: none;
-  font: 10px sans-serif;
-}
-
-</style>
-
-<div class=container>
-
-<button>Click</button> when you think you've found the shortest path!
-
-</div>
-
-<svg width="1000" height="600"></svg>
-
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
-
-
 // Help from http://bl.ocks.org/mbostock/4062045
 
 var svg = d3.select("svg"),
@@ -47,17 +14,6 @@ var simulation = d3.forceSimulation()
 
 d3.json("graph.json", function(error, graph) {
   if (error) throw error;
-
-  var shortestpath = '{{ shortestpath }}';
-
-  var newpath = []
-
-  for(i=1; i < shortestpath.length-1; i++) {
-        newpath.push(parseInt(shortestpath[i]));
-      }
-
-  console.log(newpath);
-  //Defining the previously found shortest path
 
   var link = svg.append("g")
     .attr("class", "links")
@@ -109,13 +65,13 @@ var path = [];
 
   node.on("click", function(d) {
     if (d3.select(this).attr("fill") == '#2D3590') {
-      // Do Nothing to big nodes
+      // Do Nothing
           }
 
       else if (d3.select(this).attr("fill") == '#B9BFFF') {
         d3.select(this)
         .attr("fill","lightcoral");
-        path.push(parseInt(d.id));
+        path.push(d);
         console.log(path);
               //.style("fill","lightcoral")
               //.style("stroke","red");
@@ -124,7 +80,7 @@ var path = [];
         d3.select(this)
               .attr("fill",'#B9BFFF');
 
-          var index = path.indexOf(parseInt(d.id));
+          var index = path.indexOf(d);
           path.splice(index,1);
           console.log(path);
             //  .style("stroke","blue");
@@ -177,40 +133,10 @@ var path = [];
       .style("stroke", "#000000")
       .style("opacity", "0.5");
 
-$("button").click(function(){
-  //  console.log(shortestpath);
-    path.sort();
-    //shortestpath.sort();
-    var equal = true;
-
-    if(path.length !== newpath.length)
-           {  equal = false; }
-    else {
-    for(i=0; i < path.length; i++) {
-          if(path[i] !== newpath[i]) {
-                equal = false;
-                break;
-             }
-        }
-      }
-
-    console.log(equal);
-
-  if (path.length == 0) {
-        alert('You have not selected a path!'); }
-
-else if (equal !== true) {
-        alert('This path is incorrect.');
-}
-
-else {
-        alert('Hooray! That is correct.');
-// if it is right
-}
-
-      }
-
-    );
+      $("button").click(function(){
+        if (path.length == 0) {
+        console.log('hello'); }
+      });
 
 });
 
@@ -230,8 +156,3 @@ function dragended(d) {
   d.fx = null;
   d.fy = null;
 }
-
-</script>
-
-
-{% endblock %}

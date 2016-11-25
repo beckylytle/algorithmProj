@@ -9,9 +9,9 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'alg.views.index', name='index'),
-    url(r'^shortestPath/main$', 'alg.views.ShortestPathMain', name = "shortestPath"),
-    url(r'^shortestPath/game/(?P<id>\d+)/', 'alg.views.ShortestPathGame', name = "shortestPathGame"),
-    url(r'^shortestPath/result$', 'alg.views.ShortestPathResult', name = "shortestPathResult"),
-    url(r'^HowTo/$', 'alg.views.dijkstra', name = "dijkstra"),
-    url(r'^HowTo/graph.json$', 'alg.views.json', name = "json"),
+    url(r'^Main$', 'alg.views.ShortestPathMain', name = "shortestPath"),
+    url(r'^Game$', 'alg.views.ShortestPathGame', name = "shortestPathGame"),
+    url(r'^Result$', 'alg.views.ShortestPathResult', name = "shortestPathResult"),
+    url(r'^HowTo$', 'alg.views.dijkstra', name = "dijkstra"),
+    url(r'^graph.json$', 'alg.views.json', name = "json"),
 ]
