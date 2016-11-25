@@ -8,7 +8,7 @@
 
 .links line {
   stroke: #000000;
-  stroke-opacity: 0.5;
+  stroke-opacity: 0.25;
   cursor: default;
 }
 
@@ -34,6 +34,7 @@ var svg = d3.select("svg"),
 var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody().strength(-2000))
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("text", d3.forceLink().id(function(d) { return d.id; }))
     .force("x", d3.forceX(width / 2))
     .force("y", d3.forceY(height / 2));
   //  .on("tick", ticked);
@@ -47,20 +48,25 @@ d3.json("graph.json", function(error, graph) {
     .data(graph.links)
     .enter().append("line")
     .attr("stroke-width", function(d) { return 2.5; })
-    .style("marker-end",  "url(#suit)")
-    .attr("xlink:href",function(d) { return d.value; });
+    .style("marker-end",  "url(#suit)");
+    //.attr("xlink:href",function(d) { return d.value; })
     //link.append().text(function(d) { return d.value; });
 
-var labelText = svg.selectAll(".labelText")
+
+// http://stackoverflow.com/questions/23470330/adding-label-to-the-links-in-d3-force-directed-graph
+  var linkText = svg.append("g")
+      .attr("class", "link-label")
+      .selectAll("line")
       .data(graph.links)
       .enter().append("text")
-      .attr("class","labelText")
-      .attr("dx",20)
-      .attr("dy",0)
-      .style("fill","red")
-      .append("textPath")
-        .attr("xlink:href",function(d) { return d.value; })
-        .text(function(d) { return "text for link " + d.value;});
+      .attr("font-family", "Arial, Helvetica, sans-serif")
+      .attr("fill", "Black")
+      .style("font", "bold 14px Arial")
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")
+      .text(function(d) {
+          return d.value;
+      });
 
   var node = svg.append("g")
       .attr("class", "nodes")
@@ -129,6 +135,13 @@ var path = [];
     node
         .attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
+    linkText
+        .attr("x", function(d) {
+                return ((d.source.x + d.target.x)/2);
+            })
+        .attr("y", function(d) {
+                return ((d.source.y + d.target.y)/2);
+            });
   }
 
 // From http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/
