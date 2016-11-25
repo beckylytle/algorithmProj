@@ -20,8 +20,10 @@
 </style>
 
 <div class=container>
+<p>
+<button>Click</button> when you think you've found the shortest path! </p>
 
-<button>Click</button> when you think you've found the shortest path!
+<p>I'll add more here to explain what to do later. </p>
 
 </div>
 
@@ -45,7 +47,7 @@ var simulation = d3.forceSimulation()
     .force("y", d3.forceY(height / 2));
   //  .on("tick", ticked);
 
-d3.json("graph.json", function(error, graph) {
+d3.json("static/graph.json", function(error, graph) {
   if (error) throw error;
 
   var shortestpath = '{{ shortestpath }}';
