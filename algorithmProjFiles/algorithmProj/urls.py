@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^shortestPath/game/(?P<id>\d+)/', 'alg.views.ShortestPathGame', name = "shortestPathGame"),
     url(r'^shortestPath/result$', 'alg.views.ShortestPathResult', name = "shortestPathResult"),
     url(r'^HowTo/$', 'alg.views.dijkstra', name = "dijkstra"),
+    url(r'^HowTo/graph.json$', 'alg.views.json', name = "json"),
 ]
