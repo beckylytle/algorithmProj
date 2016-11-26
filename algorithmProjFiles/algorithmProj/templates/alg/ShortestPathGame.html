@@ -20,16 +20,37 @@
 </style>
 
 <div class=container>
-<p>
-<button>Click</button> when you think you've found the shortest path! </p>
+  <div class="col-md-8"> <div class=well>
+<h3>Find the Shortest Path!</h3>
+<p>Below is a randomly generated connected graph!  The goal is to find the shortest path from the <b style="color:#2D3590">blue</b> node
+to the <b style="color:#FFA4F9">pink</b> node.  When you think you've found it, click on all the nodes that are included in this path; they should
+turn <b style="color:lightcoral">red</b> when you click on them.  You can drag the graph around to get a better feel for it.</p>
 
-<p>I'll add more here to explain what to do later. </p>
+<!-- Blue: #2D3590, Pink: #FFA4F9, Red: lightcoral, -->
+
+<p><b><button>Click</button> when you think you've found the shortest path! </b></p>
 
 </div>
+</div>
 
-<svg width="1000" height="600"></svg>
+  <div class="col-md-4">
+  <div class=well>
+
+<p>
+  <b>Citations:</b> </p>
+  <ul>
+<li>  <a href=http://stackoverflow.com/questions/23470330/adding-label-to-the-links-in-d3-force-directed-graph>Adding labels to edges</a> </li>
+<li> <a href=http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout>Making edges directed</a></li>
+<li>  <a href=http://bl.ocks.org/mbostock/4062045>An example force-directed graph</a></li>
+<li>  <a href=https://github.com/d3/d3/blob/master/API.md#forces-d3-force> Basics of force-directed graphs </a></li>
+</ul>
+</div>
+</div></div>
+
+<svg width="1000" height="700"></svg>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
+
 <script>
 
 

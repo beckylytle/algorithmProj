@@ -64,13 +64,19 @@ def ShortestPathGame(request):
 				targetval = random.choice(needed)
 			#needed.remove(targetval)
 			#first = str(targetval)
-			while targetval in edges[i] or i in edges[targetval] or i == targetval:
+			cont = True
+			counter = 0
+			while (targetval in edges[i] or i in edges[targetval] or i == targetval) and cont==True:
 				targetval = random.choice(needed)
-			needed.remove(targetval)
-			edges[i] += [targetval]
-			edges2[i] += [(targetval,edgeWeight)]
-			first = str(targetval)
-			graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
+				counter += 1
+				if counter > 100:
+					cont = False #infinite loop
+			if cont == True:
+				needed.remove(targetval)
+				edges[i] += [targetval]
+				edges2[i] += [(targetval,edgeWeight)]
+				first = str(targetval)
+				graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
 	for i in range(0,numNodes):
 		if not i == numNodes - 1 and not len(needed2) == 0 and i%2 == 0: #we only want edges coming out of previous nodes
 		#{"source": "1", "target": "2", "value": 1}
@@ -81,13 +87,19 @@ def ShortestPathGame(request):
 				targetval = random.choice(needed2)
 			#needed.remove(targetval)
 			#first = str(targetval)
-			while targetval in edges[i] or i in edges[targetval] or i == targetval:
+			cont = True
+			counter = 0
+			while (targetval in edges[i] or i in edges[targetval] or i == targetval) and cont==True:
 				targetval = random.choice(needed2)
-			needed2.remove(targetval)
-			edges[i] += [targetval]
-			edges2[i] += [(targetval,edgeWeight)]
-			first = str(targetval)
-			graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
+				counter += 1
+				if counter > 100:
+					cont = False #infinite loop
+			if cont ==True:
+				needed2.remove(targetval)
+				edges[i] += [targetval]
+				edges2[i] += [(targetval,edgeWeight)]
+				first = str(targetval)
+				graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
 	#shortestpath = DijkAlg(edges2,0,numNodes-1) #call function to run this
 	#Now, run thru all steps. Create random graph & run dijkstras
 	#Give graph (IN JSON FORMAT) to graph.json & create list of nodes of shortest path
