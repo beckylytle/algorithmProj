@@ -93,8 +93,8 @@ d3.json("static/graph.json", function(error, graph) {
       .data(graph.nodes)
       .enter().append("circle")
       .attr("r",
-      function(d) {if (d.group == 1) {return 30} else {return 20} })
-      .attr("fill", function(d) { if (d.group == 1) {return '#2D3590'} else {return '#B9BFFF'}; })
+      function(d) {if (d.group == 1) {return 30} else if (d.group==3) {return 30} else {return 20} })
+      .attr("fill", function(d) { if (d.group == 1) {return '#2D3590'} else if (d.group == 3) {return '#FFA4F9'} else {return '#B9BFFF'}; })
       .call(d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)

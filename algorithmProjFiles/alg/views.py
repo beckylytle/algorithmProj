@@ -4,6 +4,7 @@ from django.template import RequestContext, loader
 from django.shortcuts import render, render_to_response
 from django.core import management, serializers
 import json
+import random
 
 # Create your views here.
 def index(request):
@@ -13,13 +14,56 @@ def ShortestPathMain(request):
     #this page will be static
     return render(request, 'alg/ShortestPathMain.html')
 
+def DijkAlg(graph,s,t):
+	
 def ShortestPathGame(request):
 	shortestpath = []
-	example = {"nodes":[{"id": "1", "group": 1},{"id":"2","group":1}], "links":[{"source": "1", "target": "2", "value": 1}]}
+	#example = {"nodes":[{"id": "1", "group": 1},{"id":"2","group":1}], "links":[{"source": "1", "target": "2", "value": 1}]}
+	graph = {"nodes":[], "links":[]}
+	numNodes = random.randint(8,13)
+	for i in range(0,numNodes):
+		if i == 0:
+			graph["nodes"] += [{"id":str(i), "group":1}]
+		elif i == numNodes-1:
+			graph["nodes"] += [{"id":str(i), "group":3}]
+		else:
+			graph["nodes"] += [{"id":str(i), "group":2}]
+	needed = list(range(numNodes)) #all nodes included
+	needed.remove(0)
+	needed2 = list(range(numNodes)) #all nodes included
+	needed2.remove(0)
+	edges = {}
+	for j in range(0,numNodes):
+		edges[j] = [] #adjacencylist
+	for i in range(0,numNodes):
+		if not i == numNodes - 1 and not len(needed) == 0: #we only want edges coming out of previous nodes
+		#{"source": "1", "target": "2", "value": 1}
+			targetval = random.choice(needed)
+			#needed.remove(targetval)
+			#first = str(targetval)
+			while targetval in edges[i] or i in edges[targetval] or i == targetval:
+				targetval = random.choice(needed)
+			needed.remove(targetval)
+			edges[i] += [targetval]
+			first = str(targetval)
+			graph["links"] += [{"source":str(i),"target":first,"value":random.randint(1,20)}]
+	for i in range(0,numNodes):
+		if not i == numNodes - 1 and not len(needed2) == 0 and i%2 == 0: #we only want edges coming out of previous nodes
+		#{"source": "1", "target": "2", "value": 1}
+			targetval = random.choice(needed2)
+			#needed.remove(targetval)
+			#first = str(targetval)
+			while targetval in edges[i] or i in edges[targetval] or i == targetval:
+				targetval = random.choice(needed2)
+			needed2.remove(targetval)
+			edges[i] += [targetval]
+			first = str(targetval)
+			graph["links"] += [{"source":str(i),"target":first,"value":random.randint(1,20)}]
+	shortestpath = DijkAlg(graph,0,numNodes-1) #call function to run this
 	#Now, run thru all steps. Create random graph & run dijkstras
 	#Give graph (IN JSON FORMAT) to graph.json & create list of nodes of shortest path
 	with open('algorithmProj/static/graph.json', 'w') as fp:
-		json.dump(example, fp)
+		json.dump(graph, fp)
 	return render(request, 'alg/ShortestPathGame.html',{
     'shortestpath':shortestpath
     })
