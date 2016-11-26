@@ -13,9 +13,18 @@ def index(request):
 def ShortestPathMain(request):
     #this page will be static
     return render(request, 'alg/ShortestPathMain.html')
-
+"""
 def DijkAlg(graph,s,t):
-	
+	d = {} #empty dictionary to store distance
+	d[s] = 0
+	stored = [s]
+	while not len(stored) == t: #while we don't have all nodes in stored
+		#LOOK AT UR NOTES ..
+		# do something where u find all the new lengths to nodes
+		v = heap.delMin #delete min and get it!??
+		stored += [v]
+		d[v] = ???
+"""
 def ShortestPathGame(request):
 	shortestpath = []
 	#example = {"nodes":[{"id": "1", "group": 1},{"id":"2","group":1}], "links":[{"source": "1", "target": "2", "value": 1}]}
@@ -29,37 +38,57 @@ def ShortestPathGame(request):
 		else:
 			graph["nodes"] += [{"id":str(i), "group":2}]
 	needed = list(range(numNodes)) #all nodes included
+	Special = list(range(numNodes))
 	needed.remove(0)
+	Special.remove(0)
+	Special.remove(numNodes-1)
+	Special.remove(numNodes-2)
 	needed2 = list(range(numNodes)) #all nodes included
+	Special2 = list(range(numNodes))
 	needed2.remove(0)
+	Special2.remove(0)
+	Special2.remove(numNodes-1)
+	Special2.remove(numNodes-2)
 	edges = {}
+	edges2 = {}
 	for j in range(0,numNodes):
 		edges[j] = [] #adjacencylist
+		edges2[j] = [] #adjacencylist2
 	for i in range(0,numNodes):
 		if not i == numNodes - 1 and not len(needed) == 0: #we only want edges coming out of previous nodes
 		#{"source": "1", "target": "2", "value": 1}
-			targetval = random.choice(needed)
+			edgeWeight = random.randint(1,20)
+			if i == 0:
+				targetval = random.choice(Special)
+			else:
+				targetval = random.choice(needed)
 			#needed.remove(targetval)
 			#first = str(targetval)
 			while targetval in edges[i] or i in edges[targetval] or i == targetval:
 				targetval = random.choice(needed)
 			needed.remove(targetval)
 			edges[i] += [targetval]
+			edges2[i] += [(targetval,edgeWeight)]
 			first = str(targetval)
-			graph["links"] += [{"source":str(i),"target":first,"value":random.randint(1,20)}]
+			graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
 	for i in range(0,numNodes):
 		if not i == numNodes - 1 and not len(needed2) == 0 and i%2 == 0: #we only want edges coming out of previous nodes
 		#{"source": "1", "target": "2", "value": 1}
-			targetval = random.choice(needed2)
+			edgeWeight = random.randint(1,20)
+			if i == 0:
+				targetval = random.choice(Special2)
+			else:
+				targetval = random.choice(needed2)
 			#needed.remove(targetval)
 			#first = str(targetval)
 			while targetval in edges[i] or i in edges[targetval] or i == targetval:
 				targetval = random.choice(needed2)
 			needed2.remove(targetval)
 			edges[i] += [targetval]
+			edges2[i] += [(targetval,edgeWeight)]
 			first = str(targetval)
-			graph["links"] += [{"source":str(i),"target":first,"value":random.randint(1,20)}]
-	shortestpath = DijkAlg(graph,0,numNodes-1) #call function to run this
+			graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
+	#shortestpath = DijkAlg(edges2,0,numNodes-1) #call function to run this
 	#Now, run thru all steps. Create random graph & run dijkstras
 	#Give graph (IN JSON FORMAT) to graph.json & create list of nodes of shortest path
 	with open('algorithmProj/static/graph.json', 'w') as fp:
