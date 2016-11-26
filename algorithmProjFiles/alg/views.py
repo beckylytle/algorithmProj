@@ -26,7 +26,7 @@ def DijkAlg(graph,s,t):
 		d[v] = ???
 """
 def ShortestPathGame(request):
-	shortestpath = []
+	shortestpath = [5]
 	#example = {"nodes":[{"id": "1", "group": 1},{"id":"2","group":1}], "links":[{"source": "1", "target": "2", "value": 1}]}
 	graph = {"nodes":[], "links":[]}
 	numNodes = random.randint(8,13)
