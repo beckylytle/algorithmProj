@@ -11,7 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-path = 'algorithmProj/algorithmProjFiles/algorithmProj'
+path = 'algorithmProj/algorithmProjFiles/'
 if path not in sys.path:
     sys.path.append(path)
 
