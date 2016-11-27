@@ -11,6 +11,10 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+path = 'algorithmProj/algorithmProjFiles/algorithmProj'
+if path not in sys.path:
+    sys.path.append(path)
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "algorithmProj.settings")
 
 application = get_wsgi_application()
