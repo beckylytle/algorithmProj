@@ -228,6 +228,18 @@ var path = [];
 $("button").click(function(){
   //  console.log(shortestpath);
     path.sort();
+    newpath.sort();
+    stringpath = "";
+    for (i=0; i<path.length; i++) {
+      stringpath += path[i].toString();
+    }
+    path=[]; //redefine
+    for (j=0; j<stringpath.length; j++) {
+      path.push(parseInt(stringpath[j]));
+    }
+    path.sort();
+    console.log(path);
+    console.log(newpath);
     //shortestpath.sort();
     var equal = true;
 

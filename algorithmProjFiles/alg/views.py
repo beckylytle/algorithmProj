@@ -92,6 +92,10 @@ def ShortestPathGame(request):
 	shortestpath = dijkstras(edges2,0,numNodes-1) #call function to run this
 	#Now, run thru all steps. Create random graph & run dijkstras
 	#Give graph (IN JSON FORMAT) to graph.json & create list of nodes of shortest path
+	short = ""
+	for value in shortestpath:
+		short += str(value)
+	shortestpath = "[" + short + "]"
 	with open('algorithmProj/static/graph.json', 'w') as fp:
 		json.dump(graph, fp)
 	return render(request, 'alg/ShortestPathGame.html',{
