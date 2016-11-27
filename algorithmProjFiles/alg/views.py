@@ -5,6 +5,7 @@ from django.shortcuts import render, render_to_response
 from django.core import management, serializers
 import json
 import random
+from dijkstras import *
 
 # Create your views here.
 def index(request):
@@ -13,20 +14,8 @@ def index(request):
 def ShortestPathMain(request):
     #this page will be static
     return render(request, 'alg/ShortestPathMain.html')
-"""
-def DijkAlg(graph,s,t):
-	d = {} #empty dictionary to store distance
-	d[s] = 0
-	stored = [s]
-	while not len(stored) == t: #while we don't have all nodes in stored
-		#LOOK AT UR NOTES ..
-		# do something where u find all the new lengths to nodes
-		v = heap.delMin #delete min and get it!??
-		stored += [v]
-		d[v] = ???
-"""
+
 def ShortestPathGame(request):
-	shortestpath = [5]
 	#example = {"nodes":[{"id": "1", "group": 1},{"id":"2","group":1}], "links":[{"source": "1", "target": "2", "value": 1}]}
 	graph = {"nodes":[], "links":[]}
 	numNodes = random.randint(8,13)
@@ -100,7 +89,7 @@ def ShortestPathGame(request):
 				edges2[i] += [(targetval,edgeWeight)]
 				first = str(targetval)
 				graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
-	#shortestpath = DijkAlg(edges2,0,numNodes-1) #call function to run this
+	shortestpath = dijkstras(edges2,0,numNodes-1) #call function to run this
 	#Now, run thru all steps. Create random graph & run dijkstras
 	#Give graph (IN JSON FORMAT) to graph.json & create list of nodes of shortest path
 	with open('algorithmProj/static/graph.json', 'w') as fp:
