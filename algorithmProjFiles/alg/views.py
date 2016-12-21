@@ -6,6 +6,7 @@ from django.core import management, serializers
 import json
 import random
 from dijkstras import *
+from MST import *
 
 # Create your views here.
 def index(request):
@@ -14,6 +15,98 @@ def index(request):
 def ShortestPathMain(request):
     #this page will be static
     return render(request, 'alg/ShortestPathMain.html')
+
+def MST(request):
+	#example = {"nodes":[{"id": "1", "group": 1},{"id":"2","group":1}], "links":[{"source": "1", "target": "2", "value": 1}]}
+	graph = {"nodes":[], "links":[]}
+	numNodes = random.randint(9,14)
+	for i in range(0,numNodes):
+		if i == 0:
+			graph["nodes"] += [{"id":str(i), "group":2}] #make all groups the same
+		elif i == numNodes-1:
+			graph["nodes"] += [{"id":str(i), "group":2}]
+		else:
+			graph["nodes"] += [{"id":str(i), "group":2}]
+	needed = list(range(numNodes)) #all nodes included
+	Special = list(range(numNodes))
+	needed.remove(0)
+	Special.remove(0)
+	Special.remove(numNodes-1)
+	Special.remove(numNodes-2)
+	needed2 = list(range(numNodes)) #all nodes included
+	Special2 = list(range(numNodes))
+	needed2.remove(0)
+	Special2.remove(0)
+	Special2.remove(numNodes-1)
+	Special2.remove(numNodes-2)
+	edges = {}
+	edges2 = {}
+	for j in range(0,numNodes):
+		edges[j] = [] #adjacencylist
+		edges2[j] = [] #adjacencylist2
+	for i in range(0,numNodes):
+		if not i == numNodes - 1 and not len(needed) == 0: #we only want edges coming out of previous nodes
+		#{"source": "1", "target": "2", "value": 1}
+			edgeWeight = random.randint(1,20)
+			if i == 0:
+				targetval = random.choice(Special)
+			else:
+				targetval = random.choice(needed)
+			#needed.remove(targetval)
+			#first = str(targetval)
+			cont = True
+			counter = 0
+			while (targetval in edges[i] or i in edges[targetval] or i == targetval) and cont==True:
+				targetval = random.choice(needed)
+				counter += 1
+				if counter > 100:
+					cont = False #infinite loop
+			if cont == True:
+				needed.remove(targetval)
+				edges[i] += [targetval]
+				edges2[i] += [(targetval,edgeWeight)]
+				first = str(targetval)
+				graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
+	for i in range(0,numNodes):
+		if not i == numNodes - 1 and not len(needed2) == 0 and i%2 == 0: #we only want edges coming out of previous nodes
+		#{"source": "1", "target": "2", "value": 1}
+			edgeWeight = random.randint(1,20)
+			if i == 0:
+				targetval = random.choice(Special2)
+			else:
+				targetval = random.choice(needed2)
+			#needed.remove(targetval)
+			#first = str(targetval)
+			cont = True
+			counter = 0
+			while (targetval in edges[i] or i in edges[targetval] or i == targetval) and cont==True:
+				targetval = random.choice(needed2)
+				counter += 1
+				if counter > 100:
+					cont = False #infinite loop
+			if cont ==True:
+				needed2.remove(targetval)
+				edges[i] += [targetval]
+				edges2[i] += [(targetval,edgeWeight)]
+				first = str(targetval)
+				graph["links"] += [{"source":str(i),"target":first,"value":edgeWeight}]
+	#shortestpath = dijkstras(edges2,0,numNodes-1) #call function to run this
+	MST = prims(graph)
+	graph = increment(graph)
+	return render(request, 'alg/MST.html',{
+    'graph':graph, 'MST':MST,
+    })
+
+def increment(graph):
+	for node in graph["nodes"]:
+		node["id"] = str(int(node["id"])+1)
+	for edge in graph["links"]:
+		a = str(int(edge["source"])+1)
+		b = str(int(edge["target"])+1)
+		edge["source"] = a
+		edge["target"] = b
+	return graph
+	#example = {"nodes":[{"id": "1", "group": 1},{"id":"2","group":1}], "links":[{"source": "1", "target": "2", "value": 1}]}
 
 def ShortestPathGame(request):
 	#example = {"nodes":[{"id": "1", "group": 1},{"id":"2","group":1}], "links":[{"source": "1", "target": "2", "value": 1}]}
@@ -96,10 +189,11 @@ def ShortestPathGame(request):
 	for value in shortestpath:
 		short += str(value)
 	shortestpath = "[" + short + "]"
+	newgraph = str(graph)
 	with open('algorithmProj/static/graph.json', 'w') as fp:
 		json.dump(graph, fp)
 	return render(request, 'alg/ShortestPathGame.html',{
-    'shortestpath':shortestpath
+    'shortestpath':shortestpath, 'newgraph':newgraph
     })
 
 def ShortestPathResult(request):

@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     #url(r'^Main$', 'alg.views.ShortestPathMain', name = "shortestPath"),
     url(r'^Game$', views.ShortestPathGame, name = "shortestPathGame"),
+    url(r'^MST$', views.MST, name="MST"),
     #url(r'^Result$', 'alg.views.ShortestPathResult', name = "shortestPathResult"),
     #url(r'^HowTo$', 'alg.views.dijkstra', name = "dijkstra"),
     #url(r'^graph.json$', 'alg.views.json', name = "json"),

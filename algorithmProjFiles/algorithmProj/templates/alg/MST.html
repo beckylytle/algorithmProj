@@ -1,0 +1,300 @@
+{% extends "alg/base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.links line {
+
+  stroke-opacity: 0.25;
+  cursor: default;
+}
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
+
+</style>
+
+<div class=container>
+  <div class="col-md-8"> <div class=well>
+<h3>Find the Minimum Spanning Tree &#9786;</h3>
+<p>Below is a randomly generated, connected graph.  The goal is to find the minimum spanning tree of the graph.</p> <p>
+A <b>minimum spanning tree (MST)</b> is a "subset of the edges of a connected, edge-weighted undirected graph that
+connects all the vertices together, without any cycles and with the minimum possible total edge
+weight" (<a href="https://en.wikipedia.org/wiki/Minimum_spanning_tree">Wikipedia</a>).</p>
+
+<p>When you think you've found the MST, click on the subset of the edges that make up this MST.  When
+you click an edge, it should turn <b style="color:lightcoral">red.</b></p>
+
+
+<p><b><button>Click</button> when you think you've found the MST! </b></p>
+
+
+</div>
+</div>
+
+  <div class="col-md-4">
+  <div class=well>
+
+<p>
+  <b>D3.js Citations:</b> </p>
+  <ul>
+<li>  <a href=http://stackoverflow.com/questions/23470330/adding-label-to-the-links-in-d3-force-directed-graph>Adding labels to edges</a> </li>
+<li>  <a href=http://bl.ocks.org/mbostock/4062045>An example force-directed graph</a></li>
+<li>  <a href=https://github.com/d3/d3/blob/master/API.md#forces-d3-force> Basics of force-directed graphs </a></li>
+</ul>
+</div>
+</div></div>
+
+<svg width="1000" height="900"></svg>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<script>
+//example of how i will later compare MST answers!
+console.log('start');
+var minST = '{{ MST }}';
+console.log(minST);
+var res = minST.split(",");
+var res2 = [];
+for(i=0; i < res.length; i++) {
+      res2.push(parseInt(res[i]));
+    }
+var newpath = res2.sort();
+console.log(newpath);
+console.log('end');
+
+// Help from http://bl.ocks.org/mbostock/4062045
+
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+var simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody().strength(-2500))
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("text", d3.forceLink().id(function(d) { return d.id; }))
+    .force("x", d3.forceX(width / 2))
+    .force("y", d3.forceY(height / 2));
+
+    var graph = '{{ graph }}';
+    var newgraph = eval("("+"{{ graph|safe }}"+")");
+    var graph = newgraph
+    console.log(graph.links);
+    console.log(graph.nodes);
+
+
+  var link = svg.append("g")
+    .attr("class", "links")
+    .selectAll("line")
+    .data(graph.links)
+    .enter().append("line")
+    .attr("stroke-width", function(d) { return 15; })
+    .attr("stroke",'#000000')
+    .style("marker-end",  "url(#suit)");
+
+
+// http://stackoverflow.com/questions/23470330/adding-label-to-the-links-in-d3-force-directed-graph
+  var linkText = svg.append("g")
+      .attr("class", "link-label")
+      .selectAll("line")
+      .data(graph.links)
+      .enter().append("text")
+      .attr("font-family", "Arial, Helvetica, sans-serif")
+      .attr("fill", "Black")
+      .style("font", "bold 12px Arial")
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")
+      .text(function(d) {
+          return d.value;
+      });
+
+  var node = svg.append("g")
+      .attr("class", "nodes")
+      .selectAll("circle")
+      .data(graph.nodes)
+      .enter().append("circle")
+      .attr("r",
+      function(d) {return 30})
+      .attr("fill", function(d) { return '#79BCFF' })
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+      node.append("text")
+            .attr("dx", 10)
+            .attr("dy", ".35em")
+            .text(function(d) { return d.id });
+
+      var nodeText = svg.append("g")
+                .attr("class", "nodes")
+                .selectAll("circle")
+                .data(graph.nodes)
+                .enter().append("text")
+                .attr("font-family", "Arial, Helvetica, sans-serif")
+                .attr("fill", "Black")
+                .style("font", "bold 16px Arial")
+                .attr("dy", ".35em")
+                .attr("text-anchor", "middle")
+                .text(function(d) {
+                    return d.id;
+                });
+
+//Clicking on nodes
+
+var path = [];
+
+    link.on("click", function(d) {
+      //path in structure of: [612,510]
+       if (d3.select(this).attr("stroke") == '#000000') {
+          d3.select(this)
+          .attr("stroke",'#FF0000');
+          if (parseInt(d.source.id) < parseInt(d.target.id))
+          {
+            temp = parseInt(d.source.id+d.target.id)
+          }
+          else {
+            temp = parseInt(d.target.id+d.source.id)
+          }
+          //path.push(parseInt(d.target.id));
+          //path.push(parseInt(d.source.id));
+          path.push(temp);
+          console.log(path);
+                //.style("fill","lightcoral")
+                //.style("stroke","red");
+        }
+        else {
+          d3.select(this)
+                .attr("stroke",'#000000');
+            if (parseInt(d.source.id) < parseInt(d.target.id))
+            {
+              var index = path.indexOf(parseInt(d.source+d.target));
+            }
+            else {
+              var index = path.indexOf(parseInt(d.target+d.source));
+            }
+            path.splice(index,1);
+            //var index = path.indexOf(parseInt(d.source));
+            //path.splice(index,1);
+            console.log(path);
+              //  .style("stroke","blue");
+
+        }
+
+
+        });
+
+
+  simulation
+      .nodes(graph.nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(graph.links);
+
+  function ticked() {
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+    linkText
+        .attr("x", function(d) {
+                return ((d.source.x + d.target.x)/2);
+            })
+        .attr("y", function(d) {
+                return ((d.source.y + d.target.y)/2);
+            });
+    nodeText
+        .attr("x", function(d) {
+                return ((d.x));
+            })
+        .attr("y", function(d) {
+                return ((d.y));
+            });
+  }
+
+
+$("button").click(function(){
+    path.sort();
+    newpath.sort();
+    stringpath = "";
+    console.log(path);
+    console.log(newpath);
+    var equal = true;
+
+    if(path.length !== newpath.length)
+           {  equal = false; }
+    else {
+    for(i=0; i < path.length; i++) {
+          if(path[i] !== newpath[i]) {
+                equal = false;
+                break;
+             }
+        }
+      }
+
+    console.log(equal);
+
+  if (path.length == 0) {
+         alert('You have not selected any edges!');
+      }
+
+
+else if (equal !== true) {
+        alert('This selected tree is not a MST. Keep trying!');
+}
+
+else {
+        alert('Hooray! That is correct. The page will reload with a new graph.');
+        location.href = "/MST";
+// if it is right
+}
+
+      }
+
+    );
+
+ // });
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88542201-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+{% endblock %}
